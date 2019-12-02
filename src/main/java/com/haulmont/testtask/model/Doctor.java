@@ -1,8 +1,8 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.model;
 
 public class Doctor extends Person {
     private String specialization;
-    public Doctor(String n, String s, String p, String spec){
+    public Doctor(String s, String n, String p, String spec){
         setName(n);
         setSurname(s);
         setPatronymic(p);

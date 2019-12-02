@@ -1,6 +1,6 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.model;
 
-public class Patient extends Person{
+public class Patient extends Person {
     private String phoneNumber;
     public Patient(String s, String n, String p, String num){
         setName(n);

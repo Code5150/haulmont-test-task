@@ -1,4 +1,4 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.model;
 
 public abstract class Person {
     private String name;
@@ -21,5 +21,8 @@ public abstract class Person {
     }
     public String getPatronymic(){
         return patronymic;
+    }
+    public String getFullName(){
+        return this.name + " " + this.surname + " " + this.patronymic;
     }
 }

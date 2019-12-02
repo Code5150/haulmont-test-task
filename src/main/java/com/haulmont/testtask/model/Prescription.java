@@ -1,4 +1,7 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.model;
+
+import com.haulmont.testtask.model.Doctor;
+import com.haulmont.testtask.model.Patient;
 
 import java.time.LocalDate;
 
@@ -24,6 +27,12 @@ public class Prescription {
         this.creationDate = crDate;
         this.validity = val;
         this.priority = prio;
+    }
+    public String getFullPatientName(){
+        return this.patient.getSurname() + " " + this.patient.getName() + " " + this.patient.getPatronymic();
+    }
+    public String getFullDoctorName(){
+        return this.doctor.getSurname() + " " + this.doctor.getName() + " " + this.doctor.getPatronymic();
     }
     public void setDescription(String d){
         this.description = d;
@@ -57,6 +66,11 @@ public class Prescription {
     }
     public void setPriority(priorityValues pr){
         this.priority = pr;
+    }
+    public void setPriority(String pr){
+        if(pr.toLowerCase() == "normal") this.priority = priorityValues.NORMAL;
+        if(pr.toLowerCase() == "cito") this.priority = priorityValues.CITO;
+        if(pr.toLowerCase() == "statim") this.priority = priorityValues.STATIM;
     }
     public priorityValues getPriorityValue(){
         return this.priority;

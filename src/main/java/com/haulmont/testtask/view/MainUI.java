@@ -1,4 +1,4 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.view;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
@@ -14,24 +14,29 @@ public class MainUI extends UI {
         layout.setSizeFull();
         
         Label MedBase = new Label("Medic Database");
+        MedBase.addStyleName(ValoTheme.LABEL_H1);
 
         HorizontalLayout Buttons = new HorizontalLayout();
         Button Patients = new Button("Пациенты");
         Button Doctors = new Button("Врачи");
         Button Prescriptions = new Button("Рецепты");
 
-        //Patients.addClickListener(clickEvent -> )
+        //Click handling
         Patients.addClickListener(clickEvent -> {
-            addWindow(new PatientsUI());
-
-            //System.out.println(UI.getCurrent());
+            addWindow(new PatientsWindow());
+        });
+        Doctors.addClickListener(clickEvent -> {
+            addWindow(new DoctorsWindow());
+        });
+        Prescriptions.addClickListener(clickEvent -> {
+            addWindow(new PrescriptionsWindow());
         });
 
-        layout.addComponent(MedBase, "left: 50px; top: 50px");
+        layout.addComponent(MedBase, "left: 50px");
         Buttons.addComponent(Patients);
         Buttons.addComponent(Doctors);
         Buttons.addComponent(Prescriptions);
-        layout.addComponent(Buttons, "left: 50px; top: 80px");
+        layout.addComponent(Buttons, "left: 50px; top: 130px");
 
         //layout.
         TextField field = new TextField();
