@@ -1,5 +1,6 @@
 package com.haulmont.testtask.view;
 
+import com.haulmont.testtask.controller.Controller;
 import com.haulmont.testtask.model.Doctor;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.Binder;
@@ -9,10 +10,15 @@ import com.vaadin.ui.themes.ValoTheme;
 
 @Theme(ValoTheme.THEME_NAME)
 public class DoctorEditorWindow extends Window{
-    public DoctorEditorWindow(Doctor doctor){
-        super("Изменить");
+    public DoctorEditorWindow(Doctor doctor, MainUI.OPTIONS opt){
+        super();
         setHeight("390px");
         setWidth("290px");
+
+        String caption;
+        if(opt == MainUI.OPTIONS.ADD) caption = "Добавить";
+        else caption = "Изменить";
+        setCaption(caption);
 
         VerticalLayout content = new VerticalLayout();
         content.setSizeFull();
@@ -62,6 +68,8 @@ public class DoctorEditorWindow extends Window{
         ok.addClickListener(clickEvent -> {
             try {
                 binder.writeBean(doctor);
+                if(opt == MainUI.OPTIONS.UPDATE) Controller.updateDoctor(doctor);
+                if(opt == MainUI.OPTIONS.ADD) Controller.addDoctor(doctor);
                 DoctorsWindow.RefreshList();
                 this.close();
             }

@@ -39,8 +39,8 @@ public class PrescriptionsWindow extends Window{
         //Test code for prescriptions list
         ArrayList<Prescription> testPrescriptionsList = new ArrayList<>();
         testPrescriptionsList.add(new Prescription("Метамфетамин",
-                new Patient("Жмышенко", "Валерий", "Альбертович", "1488228"),
-                new Doctor("Цой", "Виктор", "Робертович", "Коновал"),
+                new Patient(0,"Жмышенко", "Валерий", "Альбертович", "1488228"),
+                new Doctor(0, "Цой", "Виктор", "Робертович", "Коновал"),
                 LocalDate.of(1488, 8, 22),
                 LocalDate.of(8228, 8, 14),
                 Prescription.priorityValues.STATIM

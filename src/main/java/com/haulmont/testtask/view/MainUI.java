@@ -1,5 +1,6 @@
 package com.haulmont.testtask.view;
 
+import com.haulmont.testtask.dao.DBManager;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
@@ -7,12 +8,18 @@ import com.vaadin.ui.themes.ValoTheme;
 
 @Theme(ValoTheme.THEME_NAME)
 public class MainUI extends UI {
+    public enum OPTIONS{
+        UPDATE,
+        ADD
+    }
 
     @Override
     protected void init(VaadinRequest request) {
         AbsoluteLayout layout = new AbsoluteLayout();
         layout.setSizeFull();
-        
+
+        DBManager manager = new DBManager();
+
         Label MedBase = new Label("Medic Database");
         MedBase.addStyleName(ValoTheme.LABEL_H1);
 

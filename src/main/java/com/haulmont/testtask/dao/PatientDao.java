@@ -1,47 +1,45 @@
 package com.haulmont.testtask.dao;
 
-import com.haulmont.testtask.model.Doctor;
 import com.haulmont.testtask.model.Patient;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class DoctorDao implements Dao<Doctor>{
+public class PatientDao implements Dao<Patient> {
 
     private DBManager manager;
 
-    private final String TABLE_NAME = "Doctor";
-
-    public  DoctorDao(DBManager manager){
-        this.manager = manager;
-    }
+    private final String TABLE_NAME = "Patient";
 
     @Override
     public void setDBManager(DBManager manager) {
         this.manager = manager;
     }
 
+    public PatientDao(DBManager manager){
+        this.manager = manager;
+    }
+
     @Override
-    public List<Doctor> getAll() {
+    public List<Patient> getAll() {
         PreparedStatement statement;
-        List<Doctor> resultList = new ArrayList<Doctor>();
+        List<Patient> resultList = new ArrayList<Patient>();
         try {
             statement = manager.getConnection().prepareStatement("SELECT * FROM " + TABLE_NAME);
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
             while (resultSet.next()) {
                 //System.out.println(resultSet.getString("Surname"));
-                resultList.add(new Doctor(
-                        resultSet.getLong("Doctor_Id"),
+                resultList.add(new Patient(
+                        resultSet.getLong("Patient_Id"),
                         resultSet.getString("Surname"),
                         resultSet.getString("Name"),
                         resultSet.getString("Patronymic"),
-                        resultSet.getString("Specialization")
+                        resultSet.getString("PhoneNumber")
                 ));
             }
-            System.out.println("All doctors selected successfully");
+            System.out.println("All patients selected successfully");
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -50,19 +48,19 @@ public class DoctorDao implements Dao<Doctor>{
     }
 
     @Override
-    public void add(Doctor doctor) {
+    public void add(Patient patient) {
         PreparedStatement statement;
         try{
             String s = "INSERT INTO " + TABLE_NAME
-                    + " (Surname, Name, Patronymic, Specialization) VALUES ('" + doctor.getSurname()
-                    + "', '" + doctor.getName()
-                    + "', '" + doctor.getPatronymic()
-                    + "', '" + doctor.getSpecialization()
+                    + " (Surname, Name, Patronymic, PhoneNumber) VALUES ('" + patient.getSurname()
+                    + "', '" + patient.getName()
+                    + "', '" + patient.getPatronymic()
+                    + "', '" + patient.getPhoneNumber()
                     + "');";
             System.out.println(s);
             statement = manager.getConnection().prepareStatement(s);
             statement.execute();
-            System.out.println("Doctor " + doctor.getId() + " added successfully");
+            System.out.println("Patient " + patient.getId() + " added successfully");
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -74,10 +72,10 @@ public class DoctorDao implements Dao<Doctor>{
         PreparedStatement statement;
         try{
             String s = "DELETE FROM " + TABLE_NAME
-                    + " WHERE Doctor_Id = " + id;
+                    + " WHERE Patient_Id = " + id;
             statement = manager.getConnection().prepareStatement(s);
             statement.execute();
-            System.out.println("Doctor " + id + " deleted successfully");
+            System.out.println("Patient " + id + " deleted successfully");
         }
         catch(SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
@@ -88,19 +86,19 @@ public class DoctorDao implements Dao<Doctor>{
     }
 
     @Override
-    public void update(Doctor doctor) {
+    public void update(Patient patient) {
         PreparedStatement statement;
         try{
             String s = "UPDATE " + TABLE_NAME
-                    + " SET Surname='" + doctor.getSurname()
-                    + "', Name='" + doctor.getName()
-                    + "', Patronymic='" + doctor.getPatronymic()
-                    + "', Specialization='" + doctor.getSpecialization()
-                    + "' WHERE Doctor_Id=" + doctor.getId();
+                    + " SET Surname='" + patient.getSurname()
+                    + "', Name='" + patient.getName()
+                    + "', Patronymic='" + patient.getPatronymic()
+                    + "', PhoneNumber='" + patient.getPhoneNumber()
+                    + "' WHERE Patient_Id=" + patient.getId();
             System.out.println(s);
             statement = manager.getConnection().prepareStatement(s);
             statement.execute();
-            System.out.println("Doctor " + doctor.getId() + " updated successfully");
+            System.out.println("Patient " + patient.getId() + " updated successfully");
         }
         catch (SQLException e) {
             e.printStackTrace();

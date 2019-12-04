@@ -1,5 +1,7 @@
 package com.haulmont.testtask.view;
 
+import com.haulmont.testtask.controller.Controller;
+import com.haulmont.testtask.dao.DBManager;
 import com.haulmont.testtask.model.Doctor;
 import com.haulmont.testtask.model.Patient;
 import com.vaadin.annotations.Theme;
@@ -9,13 +11,15 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Theme(ValoTheme.THEME_NAME)
 public class PatientsWindow extends Window{
 
     private static ListDataProvider<Patient> patientList;
-    private static Grid<Patient> grid;
+    private Grid<Patient> grid = new Grid<>();
+    private static ArrayList<Grid<Patient>> gridList = new ArrayList<>();
 
     public PatientsWindow(){
         super("Пациенты");
@@ -34,32 +38,24 @@ public class PatientsWindow extends Window{
         change.setEnabled(false);
         delete.setEnabled(false);
 
-        //Test code for patients list
-        ArrayList<Patient> testPatientsList = new ArrayList<>();
-        testPatientsList.add(new Patient("Горшенев", "Михаил", "Юрьевич", "1337228"));
-        testPatientsList.add(new Patient("Жмышенко", "Валерий", "Альбертович", "1488228"));
-        testPatientsList.add(new Patient("Жмышенко", "Валерий", "Альбертович", "1488228"));
-        testPatientsList.add(new Patient("Жмышенко", "Валерий", "Альбертович", "1488228"));
-        testPatientsList.add(new Patient("Жмышенко", "Валерий", "Альбертович", "1488228"));
-
-        patientList = DataProvider.ofCollection(testPatientsList);
-
-        grid = new Grid<>();
+        patientList = DataProvider.ofCollection(Controller.getPatientList());
         grid.setDataProvider(patientList);
 
         grid.setHeight("80%");
         grid.setWidth("98%");
-        grid.setItems(testPatientsList);
         grid.addColumn(Patient::getSurname).setCaption("Фамилия");
         grid.addColumn(Patient::getName).setCaption("Имя");
         grid.addColumn(Patient::getPatronymic).setCaption("Отчество");
         grid.addColumn(Patient::getPhoneNumber).setCaption("Номер телефона");
+
+        gridList.add(grid);
 
         grid.asSingleSelect().addValueChangeListener(valueChangeEvent -> {
             selectedPatient.set(valueChangeEvent.getValue());
             if (valueChangeEvent.getValue() != null) {
                 change.setEnabled(true);
                 delete.setEnabled(true);
+                System.out.println("Selected patient: " + valueChangeEvent.getValue().getId());
             }
             else {
                 change.setEnabled(false);
@@ -67,12 +63,17 @@ public class PatientsWindow extends Window{
             }
         });
 
+        add.addClickListener(clickEvent -> {
+            selectedPatient.set(new Patient(-1,"", "", "", ""));
+            getUI().addWindow(new PatientEditorWindow(selectedPatient.get(), MainUI.OPTIONS.ADD));
+        });
+
         change.addClickListener(clickEvent -> {
-            getUI().addWindow(new PatientEditorWindow(selectedPatient.get()));
+            getUI().addWindow(new PatientEditorWindow(selectedPatient.get(), MainUI.OPTIONS.UPDATE));
         });
 
         delete.addClickListener(clickEvent -> {
-            testPatientsList.remove(selectedPatient.get());
+            Controller.detetePatient(selectedPatient.get().getId());
             RefreshList();
         });
 
@@ -86,6 +87,7 @@ public class PatientsWindow extends Window{
         setContent(content);
     }
     public static void RefreshList(){
-        grid.setDataProvider(patientList);
+        patientList = DataProvider.ofCollection(Controller.getPatientList());
+        gridList.forEach(grid -> {grid.setDataProvider(patientList);});
     }
 }

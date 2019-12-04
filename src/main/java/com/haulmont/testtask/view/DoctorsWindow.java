@@ -1,6 +1,8 @@
 package com.haulmont.testtask.view;
 
+import com.haulmont.testtask.controller.Controller;
 import com.haulmont.testtask.model.Doctor;
+import com.haulmont.testtask.model.Patient;
 import com.haulmont.testtask.view.DoctorEditorWindow;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.provider.DataProvider;
@@ -15,7 +17,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class DoctorsWindow extends Window{
 
     private static ListDataProvider<Doctor> docList;
-    private static Grid<Doctor> grid;
+    private Grid<Doctor> grid = new Grid<>();
+    private static ArrayList<Grid<Doctor>> gridList = new ArrayList<>();
 
     public DoctorsWindow(){
         super("Врачи");
@@ -34,14 +37,7 @@ public class DoctorsWindow extends Window{
         change.setEnabled(false);
         delete.setEnabled(false);
 
-        //Test code for doctors list
-        ArrayList<Doctor> testDoctorsList = new ArrayList<>();
-        testDoctorsList.add(new Doctor("Цой", "Виктор", "Робертович", "Коновал"));
-        testDoctorsList.add(new Doctor("Никонов", "Алексей", "Альбертович", "Эскулап"));
-
-        docList = DataProvider.ofCollection(testDoctorsList);
-
-        grid = new Grid<>();
+        docList = DataProvider.ofCollection(Controller.getDoctorList());
         grid.setDataProvider(docList);
 
         grid.setHeight("80%");
@@ -51,11 +47,14 @@ public class DoctorsWindow extends Window{
         grid.addColumn(Doctor::getPatronymic).setCaption("Отчество");
         grid.addColumn(Doctor::getSpecialization).setCaption("Специализация");
 
+        gridList.add(grid);
+
         grid.asSingleSelect().addValueChangeListener(valueChangeEvent -> {
             selectedDoctor.set(valueChangeEvent.getValue());
             if (valueChangeEvent.getValue() != null) {
                 change.setEnabled(true);
                 delete.setEnabled(true);
+                System.out.println("Selected doctor: " + valueChangeEvent.getValue().getId());
             }
             else {
                 change.setEnabled(false);
@@ -63,12 +62,17 @@ public class DoctorsWindow extends Window{
             }
         });
 
+        add.addClickListener(clickEvent -> {
+            selectedDoctor.set(new Doctor(-1,"", "", "", ""));
+            getUI().addWindow(new DoctorEditorWindow(selectedDoctor.get(), MainUI.OPTIONS.ADD));
+        });
+
         change.addClickListener(clickEvent -> {
-            getUI().addWindow(new DoctorEditorWindow(selectedDoctor.get()));
+            getUI().addWindow(new DoctorEditorWindow(selectedDoctor.get(), MainUI.OPTIONS.UPDATE));
         });
 
         delete.addClickListener(clickEvent -> {
-            testDoctorsList.remove(selectedDoctor.get());
+            Controller.deteteDoctor(selectedDoctor.get().getId());
             RefreshList();
         });
 
@@ -82,6 +86,7 @@ public class DoctorsWindow extends Window{
         setContent(content);
     }
     public static void RefreshList(){
-        grid.setDataProvider(docList);
+        docList = DataProvider.ofCollection(Controller.getDoctorList());
+        gridList.forEach(grid -> {grid.setDataProvider(docList);});
     }
 }

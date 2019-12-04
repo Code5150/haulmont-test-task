@@ -1,15 +1,22 @@
 package com.haulmont.testtask.view;
 
+import com.haulmont.testtask.controller.Controller;
 import com.haulmont.testtask.model.Patient;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.ui.*;
 
 public class PatientEditorWindow extends Window {
-    public PatientEditorWindow(Patient patient){
-        super("Изменить");
+
+    public PatientEditorWindow(Patient patient, MainUI.OPTIONS opt){
+        super();
         setHeight("390px");
         setWidth("290px");
+
+        String caption;
+        if(opt == MainUI.OPTIONS.ADD) caption = "Добавить";
+        else caption = "Изменить";
+        setCaption(caption);
 
         VerticalLayout content = new VerticalLayout();
         content.setSizeFull();
@@ -59,11 +66,13 @@ public class PatientEditorWindow extends Window {
         ok.addClickListener(clickEvent -> {
             try {
                 binder.writeBean(patient);
+                if(opt == MainUI.OPTIONS.UPDATE) Controller.updatePatient(patient);
+                if(opt == MainUI.OPTIONS.ADD) Controller.addPatient(patient);
                 PatientsWindow.RefreshList();
                 this.close();
             }
             catch (ValidationException e){
-                System.out.println(e);
+                e.printStackTrace();
             }
         });
 
