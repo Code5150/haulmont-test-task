@@ -18,8 +18,6 @@ public class MainUI extends UI {
         AbsoluteLayout layout = new AbsoluteLayout();
         layout.setSizeFull();
 
-        DBManager manager = new DBManager();
-
         Label MedBase = new Label("Medic Database");
         MedBase.addStyleName(ValoTheme.LABEL_H1);
 

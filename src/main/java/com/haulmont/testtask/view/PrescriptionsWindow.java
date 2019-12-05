@@ -1,5 +1,6 @@
 package com.haulmont.testtask.view;
 
+import com.haulmont.testtask.controller.Controller;
 import com.haulmont.testtask.model.Doctor;
 import com.haulmont.testtask.model.Patient;
 import com.haulmont.testtask.model.Prescription;
@@ -17,11 +18,12 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PrescriptionsWindow extends Window{
 
     private static ListDataProvider<Prescription> prescriptionList;
-    private static Grid<Prescription> grid;
+    private Grid<Prescription> grid = new Grid<>();
+    private static ArrayList<Grid<Prescription>> gridList = new ArrayList<>();
 
     public PrescriptionsWindow(){
         super("Рецепты");
-        setHeight("400px");
+        setHeight("500px");
         setWidth("1340px");
 
         AbsoluteLayout content = new AbsoluteLayout();
@@ -36,35 +38,48 @@ public class PrescriptionsWindow extends Window{
         change.setEnabled(false);
         delete.setEnabled(false);
 
-        //Test code for prescriptions list
-        ArrayList<Prescription> testPrescriptionsList = new ArrayList<>();
-        testPrescriptionsList.add(new Prescription("Метамфетамин",
-                new Patient(0,"Жмышенко", "Валерий", "Альбертович", "1488228"),
-                new Doctor(0, "Цой", "Виктор", "Робертович", "Коновал"),
-                LocalDate.of(1488, 8, 22),
-                LocalDate.of(8228, 8, 14),
-                Prescription.priorityValues.STATIM
-                ));
+        HorizontalLayout filter = new HorizontalLayout();
+        TextField desc = new TextField();
+        desc.setCaption("Описание");
+        ComboBox<Patient> patient = new ComboBox();
+        patient.setCaption("Пациент");
+        ComboBox<String> priority = new ComboBox();
+        priority.setCaption("Приоритет");
+        Button apply = new Button("Применить");
 
-        prescriptionList = DataProvider.ofCollection(testPrescriptionsList);
+        patient.setItems(Controller.getPatientList());
+        patient.setItemCaptionGenerator(item -> item.getFullName());
+        patient.setEmptySelectionAllowed(true);
+        patient.setEmptySelectionCaption("---");
+        priority.setItems("Нормальный", "Срочный", "Немедленный");
+        priority.setEmptySelectionAllowed(true);
+        priority.setEmptySelectionCaption("---");
 
-        grid = new Grid<>();
+        filter.addComponent(desc);
+        filter.addComponent(patient);
+        filter.addComponent(priority);
+        filter.addComponent(apply);
+
+        prescriptionList = DataProvider.ofCollection(Controller.getPrescriptionList());
         grid.setDataProvider(prescriptionList);
 
-        grid.setHeight("80%");
+        grid.setHeight("75%");
         grid.setWidth("98%");
         grid.addColumn(Prescription::getDescription).setCaption("Описание");
         grid.addColumn(Prescription::getFullPatientName).setCaption("Пациент");
         grid.addColumn(Prescription::getFullDoctorName).setCaption("Врач");
         grid.addColumn(Prescription::getCreationDate).setCaption("Дата назначения");
         grid.addColumn(Prescription::getValidity).setCaption("Дата окончания действия");
-        grid.addColumn(Prescription::getPriorityName).setCaption("Приоритет");
+        grid.addColumn(Prescription::getPriority).setCaption("Приоритет");
+
+        gridList.add(grid);
 
         grid.asSingleSelect().addValueChangeListener(valueChangeEvent -> {
             selectedPrescription.set(valueChangeEvent.getValue());
             if (valueChangeEvent.getValue() != null) {
                 change.setEnabled(true);
                 delete.setEnabled(true);
+                System.out.println("Selected prescription: " + valueChangeEvent.getValue().getPriority());
             }
             else {
                 change.setEnabled(false);
@@ -72,25 +87,38 @@ public class PrescriptionsWindow extends Window{
             }
         });
 
+        add.addClickListener(clickEvent -> {
+            selectedPrescription.set(new Prescription(-1, "", null, null, null, null, "Нормальный"));
+            getUI().addWindow(new PrescriptionEditorWindow(selectedPrescription.get(), MainUI.OPTIONS.ADD));
+        });
+
         change.addClickListener(clickEvent -> {
-            getUI().addWindow(new PrescriptionEditorWindow(selectedPrescription.get()));
+            getUI().addWindow(new PrescriptionEditorWindow(selectedPrescription.get(), MainUI.OPTIONS.UPDATE));
         });
 
         delete.addClickListener(clickEvent -> {
-            testPrescriptionsList.remove(selectedPrescription.get());
+            Controller.deletePrescription(selectedPrescription.get().getId());
             RefreshList();
         });
 
-        content.addComponent(grid,"top: 2%; left: 2%;");
+        addCloseListener(closeEvent -> {
+            gridList.remove(grid);
+        });
+
+        content.addComponent(filter, "top: 2%; left: 2%;");
+        content.addComponent(grid,"top: 17%; left: 2%;");
         buttons.addComponent(add);
         buttons.addComponent(change);
         buttons.addComponent(delete);
         content.addComponent(buttons, "top: 86%; left: 2%;");
 
+        //System.out.println("bshabf".contains(""));
+
         center();
         setContent(content);
     }
     public static void RefreshList(){
-        grid.setDataProvider(prescriptionList);
+        prescriptionList = DataProvider.ofCollection(Controller.getPrescriptionList());
+        gridList.forEach(grid -> {grid.setDataProvider(prescriptionList);});
     }
 }

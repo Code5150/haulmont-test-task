@@ -50,6 +50,33 @@ public class DoctorDao implements Dao<Doctor>{
     }
 
     @Override
+    public Doctor getById(long id) {
+        PreparedStatement statement;
+        Doctor result;
+        try {
+            statement = manager.getConnection().prepareStatement("SELECT * FROM " + TABLE_NAME
+                                                                    + " WHERE Doctor_Id=" + id);
+            statement.execute();
+            ResultSet resultSet = statement.getResultSet();
+            while (resultSet.next()) {
+                result = new Doctor(
+                        resultSet.getLong("Doctor_Id"),
+                        resultSet.getString("Surname"),
+                        resultSet.getString("Name"),
+                        resultSet.getString("Patronymic"),
+                        resultSet.getString("Specialization")
+                );
+                System.out.println("Doctor" + id + " selected successfully");
+                return result;
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public void add(Doctor doctor) {
         PreparedStatement statement;
         try{

@@ -76,6 +76,10 @@ public class DoctorsWindow extends Window{
             RefreshList();
         });
 
+        addCloseListener(closeEvent -> {
+            gridList.remove(grid);
+        });
+
         content.addComponent(grid,"top: 2%; left: 2%;");
         buttons.addComponent(add);
         buttons.addComponent(change);

@@ -8,4 +8,5 @@ public interface Dao<T> {
     void update(T entity);
     void delete(long id);
     List<T> getAll();
+    T getById(long id);
 }

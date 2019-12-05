@@ -17,18 +17,28 @@ CREATE TABLE IF NOT EXISTS Doctor (
 CREATE TABLE IF NOT EXISTS Prescription (
     Prescription_ID bigint IDENTITY PRIMARY KEY NOT NULL ,
     Description varchar(256)  NOT NULL ,
-    Patient bigint,
-    Doctor bigint,
-    Creation_Date datetime  NOT NULL ,
-    Validity datetime  NOT NULL ,
-    Priority varchar(16)  NOT NULL
+    Patient bigint REFERENCES Patient (Patient_ID),
+    Doctor bigint REFERENCES Doctor (Doctor_ID),
+    Creation_Date date  NOT NULL ,
+    Validity date  NOT NULL ,
+    Priority varchar(32) NOT NULL
 );
 
-ALTER TABLE Prescription ADD CONSTRAINT fk_Prescription_Patient FOREIGN KEY(Patient)
-REFERENCES Patient (Patient_ID);
+INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Жмышенко', 'Валерий', 'Альбертович', '228-14-88');
+INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Голубев', 'Максим', 'Алексеевич', '564-65-98');
+INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Соколов', 'Никита', 'Валерьевич', '275-41-28');
+INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Уварова', 'Майя', 'Ярославовна', '297-65-35');
+INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Воронцов', 'Эдуард', 'Русланович', '478-66-53');
+INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Панфилова', 'Элеонора', 'Сергеевна', '365-03-13');
+INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Тарасова', 'Ульяна', 'Владимировна', '594-12-02');
+INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Максимов', 'Роман', 'Алексеевич', '302-80-50');
+INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Михайлов', 'Павел', 'Николаевич', '452-67-39');
+INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Копылов', 'Аркадий', 'Авдеевич', '214-39-08');
 
-ALTER TABLE Prescription ADD CONSTRAINT fk_Prescription_Doctor FOREIGN KEY(Doctor)
-REFERENCES Doctor (Doctor_ID);
+INSERT INTO Doctor (Surname, Name, Patronymic, Specialization) VALUES ('Жмышенко', 'Валерий', 'Альбертович', 'Аллерголог');
+INSERT INTO Doctor (Surname, Name, Patronymic, Specialization) VALUES ('Воронин', 'Максим', 'Глебович', 'Флеболог');
+INSERT INTO Doctor (Surname, Name, Patronymic, Specialization) VALUES ('Сергеев', 'Владимир', 'Станиславович', 'Терапевт');
+INSERT INTO Doctor (Surname, Name, Patronymic, Specialization) VALUES ('Тоцкий', 'Валерий', 'Анатольевич', 'Отоларинголог');
+INSERT INTO Doctor (Surname, Name, Patronymic, Specialization) VALUES ('Семёнов', 'Степан', 'Александрович', 'Венеролог');
 
-INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Жмышенко', 'Valeriy', 'Albertovich', '228-14-88');
-INSERT INTO Patient (Surname, Name, Patronymic, PhoneNumber) VALUES ('Васильев', 'Valeriy', 'Albertovich', '228-14-88');
+INSERT INTO Prescription (Description, Patient, Doctor, Creation_Date, Validity, Priority) VALUES ('Аддерал', 0, 2, '2019-01-01', '2020-01-01', 'Немедленный')

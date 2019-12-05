@@ -1,8 +1,5 @@
 package com.haulmont.testtask.model;
 
-import com.haulmont.testtask.model.Doctor;
-import com.haulmont.testtask.model.Patient;
-
 import java.time.LocalDate;
 
 public class Prescription {
@@ -13,6 +10,7 @@ public class Prescription {
         STATIM
     }
     //Поля
+    private long id;
     private String description;
     private Patient patient;
     private Doctor doctor;
@@ -20,65 +18,99 @@ public class Prescription {
     private LocalDate validity;
     private priorityValues priority;
     //Методы
-    public Prescription(String desc, Patient pat, Doctor doc, LocalDate crDate, LocalDate val, priorityValues prio){
-        this.description = desc;
-        this.patient = pat;
-        this.doctor = doc;
-        this.creationDate = crDate;
-        this.validity = val;
-        this.priority = prio;
+    /*public Prescription(long id, String desc, Patient pat, Doctor doc, LocalDate crDate, LocalDate val, priorityValues prio){
+        setId(id);
+        setDescription(desc);
+        setPatient(pat);
+        setDoctor(doc);
+        setCreationDate(crDate);
+        setValidity(val);
+        setPriorityValue(prio);
+    }*/
+    public Prescription(long id, String desc, Patient pat, Doctor doc, LocalDate crDate, LocalDate val, String prio){
+        setId(id);
+        setDescription(desc);
+        setPatient(pat);
+        setDoctor(doc);
+        setCreationDate(crDate);
+        setValidity(val);
+        setPriority(prio);
     }
+
     public String getFullPatientName(){
         return this.patient.getSurname() + " " + this.patient.getName() + " " + this.patient.getPatronymic();
     }
+
     public String getFullDoctorName(){
         return this.doctor.getSurname() + " " + this.doctor.getName() + " " + this.doctor.getPatronymic();
     }
+
     public void setDescription(String d){
         this.description = d;
     }
+
     public String getDescription(){
         return this.description;
     }
+
     public void setPatient(Patient p){
         this.patient = p;
     }
+
     public Patient getPatient(){
         return this.patient;
     }
+
     public void setDoctor(Doctor doc){
         this.doctor = doc;
     }
+
     public Doctor getDoctor(){
         return this.doctor;
     }
+
     public void setCreationDate(LocalDate dat){
         this.creationDate = dat;
     }
+
     public LocalDate getCreationDate(){
         return this.creationDate;
     }
+
     public void setValidity(LocalDate dat){
         this.validity = dat;
     }
+
     public LocalDate getValidity(){
         return this.validity;
     }
-    public void setPriority(priorityValues pr){
+
+    /*public void setPriorityValue(priorityValues pr){
         this.priority = pr;
-    }
+    }*/
+
     public void setPriority(String pr){
-        if(pr.toLowerCase() == "normal") this.priority = priorityValues.NORMAL;
-        if(pr.toLowerCase() == "cito") this.priority = priorityValues.CITO;
-        if(pr.toLowerCase() == "statim") this.priority = priorityValues.STATIM;
+        if(pr.toLowerCase().equals("нормальный")) this.priority = priorityValues.NORMAL;
+        if(pr.toLowerCase().equals("срочный")) this.priority = priorityValues.CITO;
+        if(pr.toLowerCase().equals("немедленный")) this.priority = priorityValues.STATIM;
     }
-    public priorityValues getPriorityValue(){
+
+    /*public priorityValues getPriorityValue(){
         return this.priority;
-    }
-    public String getPriorityName(){
-        if (this.priority == priorityValues.NORMAL) return "Нормальный";
-        if (this.priority == priorityValues.CITO) return "Срочный";
-        if (this.priority == priorityValues.STATIM) return "Немедленный";
+    }*/
+
+    public String getPriority(){
+        if (priority == priorityValues.NORMAL) return "Нормальный";
+        if (priority == priorityValues.CITO) return "Срочный";
+        if (priority == priorityValues.STATIM) return "Немедленный";
         return null;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

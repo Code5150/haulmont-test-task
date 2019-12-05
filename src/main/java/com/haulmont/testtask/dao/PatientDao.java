@@ -1,5 +1,6 @@
 package com.haulmont.testtask.dao;
 
+import com.haulmont.testtask.model.Doctor;
 import com.haulmont.testtask.model.Patient;
 
 import java.sql.*;
@@ -45,6 +46,33 @@ public class PatientDao implements Dao<Patient> {
             e.printStackTrace();
         }
         return resultList;
+    }
+
+    @Override
+    public Patient getById(long id) {
+        PreparedStatement statement;
+        Patient result;
+        try {
+            statement = manager.getConnection().prepareStatement("SELECT * FROM " + TABLE_NAME
+                    + " WHERE Patient_Id=" + id);
+            statement.execute();
+            ResultSet resultSet = statement.getResultSet();
+            while (resultSet.next()) {
+                result = new Patient(
+                        resultSet.getLong("Patient_Id"),
+                        resultSet.getString("Surname"),
+                        resultSet.getString("Name"),
+                        resultSet.getString("Patronymic"),
+                        resultSet.getString("PhoneNumber")
+                );
+                System.out.println("Patient" + id + " selected successfully");
+                return result;
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

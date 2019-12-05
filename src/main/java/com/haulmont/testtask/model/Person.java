@@ -32,7 +32,7 @@ public abstract class Person {
     }
 
     public String getFullName(){
-        return this.name + " " + this.surname + " " + this.patronymic;
+        return surname + " " +  name + " " +  patronymic;
     }
 
     public long getId() {
