@@ -7,6 +7,7 @@ import com.haulmont.testtask.model.Prescription;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -22,10 +23,12 @@ public class PrescriptionsWindow extends Window{
     private static ArrayList<Grid<Prescription>> gridList = new ArrayList<>();
 
     public PrescriptionsWindow(){
+        //Заголовки и размер окна
         super("Рецепты");
         setHeight("500px");
         setWidth("1340px");
 
+        //Содержимое окна: кнопки и таблица
         AbsoluteLayout content = new AbsoluteLayout();
         content.setSizeFull();
         HorizontalLayout buttons = new HorizontalLayout();
@@ -34,10 +37,14 @@ public class PrescriptionsWindow extends Window{
         Button change = new Button("Изменить");
         Button delete = new Button("Удалить");
 
+        //Текущий выбранный объект
         AtomicReference<Prescription> selectedPrescription = new AtomicReference<Prescription>();
+
+        //Кнопки изменить/удалить заблокированы до выбора значения
         change.setEnabled(false);
         delete.setEnabled(false);
 
+        //Фильтр и его поля
         HorizontalLayout filter = new HorizontalLayout();
         TextField desc = new TextField();
         desc.setCaption("Описание");
@@ -46,7 +53,10 @@ public class PrescriptionsWindow extends Window{
         ComboBox<String> priority = new ComboBox();
         priority.setCaption("Приоритет");
         Button apply = new Button("Применить");
+        //apply.setCaption("");
+        apply.setHeight("100%");
 
+        //Установка возможных значений полям фильтра
         patient.setItems(Controller.getPatientList());
         patient.setItemCaptionGenerator(item -> item.getFullName());
         patient.setEmptySelectionAllowed(true);
@@ -60,9 +70,27 @@ public class PrescriptionsWindow extends Window{
         filter.addComponent(priority);
         filter.addComponent(apply);
 
+        //Логика фильтра
+
+        apply.addClickListener(clickEvent -> {
+            ListDataProvider<Prescription> p = (ListDataProvider<Prescription>) grid.getDataProvider();
+            p.setFilter((prescription) -> {
+                boolean descMatch = true;
+                boolean patMatch = true;
+                boolean prioMatch = true;
+                if(desc.getValue() != null) descMatch = prescription.getDescription().contains(desc.getValue());
+                if(patient.getValue() != null) patMatch = (prescription.getPatient().getId() == patient.getValue().getId());
+                if(priority.getValue() != null) prioMatch = prescription.getPriority().equalsIgnoreCase(priority.getValue());
+                return descMatch && patMatch && prioMatch;
+            });
+            grid.setDataProvider(p);
+        });
+
+        //Установка значений в таблице
         prescriptionList = DataProvider.ofCollection(Controller.getPrescriptionList());
         grid.setDataProvider(prescriptionList);
 
+        //Установка колонок в табице
         grid.setHeight("75%");
         grid.setWidth("98%");
         grid.addColumn(Prescription::getDescription).setCaption("Описание");
@@ -72,8 +100,11 @@ public class PrescriptionsWindow extends Window{
         grid.addColumn(Prescription::getValidity).setCaption("Дата окончания действия");
         grid.addColumn(Prescription::getPriority).setCaption("Приоритет");
 
+        //Добавление таблицы в список обновляемых таблиц
         gridList.add(grid);
 
+        //Выбор элемента таблицы: если выбран какой-либо элемент
+        //Есть возможность отредактировать или удалить его
         grid.asSingleSelect().addValueChangeListener(valueChangeEvent -> {
             selectedPrescription.set(valueChangeEvent.getValue());
             if (valueChangeEvent.getValue() != null) {
@@ -87,6 +118,7 @@ public class PrescriptionsWindow extends Window{
             }
         });
 
+        //Логика кнопок добавления/изменения/удаления
         add.addClickListener(clickEvent -> {
             selectedPrescription.set(new Prescription(-1, "", null, null, null, null, "Нормальный"));
             getUI().addWindow(new PrescriptionEditorWindow(selectedPrescription.get(), MainUI.OPTIONS.ADD));
@@ -101,10 +133,12 @@ public class PrescriptionsWindow extends Window{
             RefreshList();
         });
 
+        //Удаление таблицы из списка при закрытии окна
         addCloseListener(closeEvent -> {
             gridList.remove(grid);
         });
 
+        //Установка содержимого
         content.addComponent(filter, "top: 2%; left: 2%;");
         content.addComponent(grid,"top: 17%; left: 2%;");
         buttons.addComponent(add);
@@ -112,13 +146,14 @@ public class PrescriptionsWindow extends Window{
         buttons.addComponent(delete);
         content.addComponent(buttons, "top: 86%; left: 2%;");
 
-        //System.out.println("bshabf".contains(""));
-
         center();
         setContent(content);
     }
+    //Обновить содержимое
     public static void RefreshList(){
+        //Обновление DataProvider
         prescriptionList = DataProvider.ofCollection(Controller.getPrescriptionList());
+        //Установка обновленного DataProvider для каждой таблицы
         gridList.forEach(grid -> {grid.setDataProvider(prescriptionList);});
     }
 }

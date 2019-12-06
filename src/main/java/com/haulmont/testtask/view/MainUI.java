@@ -18,7 +18,7 @@ public class MainUI extends UI {
         AbsoluteLayout layout = new AbsoluteLayout();
         layout.setSizeFull();
 
-        Label MedBase = new Label("Medic Database");
+        Label MedBase = new Label("Медицинская база данных");
         MedBase.addStyleName(ValoTheme.LABEL_H1);
 
         HorizontalLayout Buttons = new HorizontalLayout();
