@@ -1,17 +1,14 @@
 package com.haulmont.testtask.view;
 
 import com.haulmont.testtask.controller.Controller;
-import com.haulmont.testtask.model.Doctor;
 import com.haulmont.testtask.model.Patient;
 import com.haulmont.testtask.model.Prescription;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -53,7 +50,6 @@ public class PrescriptionsWindow extends Window{
         ComboBox<String> priority = new ComboBox();
         priority.setCaption("Приоритет");
         Button apply = new Button("Применить");
-        //apply.setCaption("");
         apply.setHeight("100%");
 
         //Установка возможных значений полям фильтра
@@ -71,9 +67,8 @@ public class PrescriptionsWindow extends Window{
         filter.addComponent(apply);
 
         //Логика фильтра
-
         apply.addClickListener(clickEvent -> {
-            ListDataProvider<Prescription> p = (ListDataProvider<Prescription>) grid.getDataProvider();
+            ListDataProvider<Prescription> p = DataProvider.ofCollection(prescriptionList.getItems());
             p.setFilter((prescription) -> {
                 boolean descMatch = true;
                 boolean patMatch = true;
@@ -90,7 +85,7 @@ public class PrescriptionsWindow extends Window{
         prescriptionList = DataProvider.ofCollection(Controller.getPrescriptionList());
         grid.setDataProvider(prescriptionList);
 
-        //Установка колонок в табице
+        //Установка колонок в таблице
         grid.setHeight("75%");
         grid.setWidth("98%");
         grid.addColumn(Prescription::getDescription).setCaption("Описание");
@@ -154,6 +149,8 @@ public class PrescriptionsWindow extends Window{
         //Обновление DataProvider
         prescriptionList = DataProvider.ofCollection(Controller.getPrescriptionList());
         //Установка обновленного DataProvider для каждой таблицы
-        gridList.forEach(grid -> {grid.setDataProvider(prescriptionList);});
+        gridList.forEach(grid -> {
+            grid.setDataProvider(prescriptionList);
+        });
     }
 }

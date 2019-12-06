@@ -2,8 +2,6 @@ package com.haulmont.testtask.view;
 
 import com.haulmont.testtask.controller.Controller;
 import com.haulmont.testtask.model.Doctor;
-import com.haulmont.testtask.model.Patient;
-import com.haulmont.testtask.view.DoctorEditorWindow;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
@@ -25,6 +23,7 @@ public class DoctorsWindow extends Window{
         setHeight("400px");
         setWidth("600px");
 
+        //Содержимое окна: кнопки и таблица
         AbsoluteLayout content = new AbsoluteLayout();
         content.setSizeFull();
         HorizontalLayout buttons = new HorizontalLayout();
@@ -33,13 +32,18 @@ public class DoctorsWindow extends Window{
         Button change = new Button("Изменить");
         Button delete = new Button("Удалить");
 
+        //Текущий выбранный объект
         AtomicReference<Doctor> selectedDoctor = new AtomicReference<Doctor>();
+
+        //Кнопки изменить/удалить заблокированы до выбора значения
         change.setEnabled(false);
         delete.setEnabled(false);
 
+        //Установка значений в таблице
         docList = DataProvider.ofCollection(Controller.getDoctorList());
         grid.setDataProvider(docList);
 
+        //Установка колонок в таблице
         grid.setHeight("80%");
         grid.setWidth("98%");
         grid.addColumn(Doctor::getSurname).setCaption("Фамилия");
@@ -47,8 +51,11 @@ public class DoctorsWindow extends Window{
         grid.addColumn(Doctor::getPatronymic).setCaption("Отчество");
         grid.addColumn(Doctor::getSpecialization).setCaption("Специализация");
 
+        //Добавление таблицы в список обновляемых таблиц
         gridList.add(grid);
 
+        //Выбор элемента таблицы: если выбран какой-либо элемент
+        //Есть возможность отредактировать или удалить его
         grid.asSingleSelect().addValueChangeListener(valueChangeEvent -> {
             selectedDoctor.set(valueChangeEvent.getValue());
             if (valueChangeEvent.getValue() != null) {
@@ -62,6 +69,7 @@ public class DoctorsWindow extends Window{
             }
         });
 
+        //Логика кнопок добавления/изменения/удаления
         add.addClickListener(clickEvent -> {
             selectedDoctor.set(new Doctor(-1,"", "", "", ""));
             getUI().addWindow(new DoctorEditorWindow(selectedDoctor.get(), MainUI.OPTIONS.ADD));
@@ -72,14 +80,16 @@ public class DoctorsWindow extends Window{
         });
 
         delete.addClickListener(clickEvent -> {
-            Controller.deteteDoctor(selectedDoctor.get().getId());
+            Controller.deleteDoctor(selectedDoctor.get().getId());
             RefreshList();
         });
 
+        //Удаление таблицы из списка при закрытии окна
         addCloseListener(closeEvent -> {
             gridList.remove(grid);
         });
 
+        //Установка содержимого
         content.addComponent(grid,"top: 2%; left: 2%;");
         buttons.addComponent(add);
         buttons.addComponent(change);
@@ -89,8 +99,11 @@ public class DoctorsWindow extends Window{
         center();
         setContent(content);
     }
+    //Обновить содержимое
     public static void RefreshList(){
+        //Обновление DataProvider
         docList = DataProvider.ofCollection(Controller.getDoctorList());
+        //Установка обновленного DataProvider для каждой таблицы
         gridList.forEach(grid -> {grid.setDataProvider(docList);});
     }
 }

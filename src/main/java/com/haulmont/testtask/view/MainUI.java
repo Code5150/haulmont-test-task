@@ -1,6 +1,5 @@
 package com.haulmont.testtask.view;
 
-import com.haulmont.testtask.dao.DBManager;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
@@ -26,7 +25,7 @@ public class MainUI extends UI {
         Button Doctors = new Button("Врачи");
         Button Prescriptions = new Button("Рецепты");
 
-        //Click handling
+        //Логика кнопок
         Patients.addClickListener(clickEvent -> {
             addWindow(new PatientsWindow());
         });
@@ -37,14 +36,12 @@ public class MainUI extends UI {
             addWindow(new PrescriptionsWindow());
         });
 
+        //Добавление компонентов
         layout.addComponent(MedBase, "left: 50px");
         Buttons.addComponent(Patients);
         Buttons.addComponent(Doctors);
         Buttons.addComponent(Prescriptions);
         layout.addComponent(Buttons, "left: 50px; top: 130px");
-
-        //layout.
-        TextField field = new TextField();
 
         setContent(layout);
     }

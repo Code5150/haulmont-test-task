@@ -1,4 +1,4 @@
-package com.haulmont.testtask.dao;
+package com.haulmont.testtask.controller;
 
 import org.hsqldb.jdbc.JDBCDataSource;
 
@@ -17,19 +17,19 @@ public class DBManager {
     }
 
     public DBManager(){
-        //Driver loading
+        //Проверка наличия драйвера БД
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        //Setting attributes
+        //Установка значений
         JDBCDataSource dataSource = new JDBCDataSource();
         dataSource.setDatabaseName(DB_NAME);
         dataSource.setURL(DB_URL);
         dataSource.setUser("User");
         dataSource.setPassword("");
-        //Connecting
+        //Соединение
         try {
             connection = dataSource.getConnection();
             createDatabase();
@@ -39,11 +39,12 @@ public class DBManager {
         }
     }
 
+    //Считывает и выполняет SQL-скрипт
     public void createDatabase(){
-        InputStream in;
+        InputStream input;
         try {
-            in = new FileInputStream(DBSCRIPT_PATH);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            input = new FileInputStream(DBSCRIPT_PATH);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
             String str = reader.readLine();
             StringBuilder script = new StringBuilder(str);

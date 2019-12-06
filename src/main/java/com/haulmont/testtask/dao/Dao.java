@@ -1,5 +1,7 @@
 package com.haulmont.testtask.dao;
 
+import com.haulmont.testtask.controller.DBManager;
+
 import java.util.List;
 
 public interface Dao<T> {

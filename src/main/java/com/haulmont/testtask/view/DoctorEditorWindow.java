@@ -15,17 +15,21 @@ public class DoctorEditorWindow extends Window{
         setHeight("390px");
         setWidth("290px");
 
+        //Установка заголовка
         String caption;
         if(opt == MainUI.OPTIONS.ADD) caption = "Добавить";
         else caption = "Изменить";
         setCaption(caption);
 
+        //Установка разметки содержимого
         VerticalLayout content = new VerticalLayout();
         content.setSizeFull();
         HorizontalLayout buttons = new HorizontalLayout();
 
+        //Binder для переданного объекта
         Binder<Doctor> binder = new Binder<>(Doctor.class);
 
+        //Поля редактирования
         TextField name = new TextField();
         name.setCaption("Имя");
         TextField surname = new TextField();
@@ -35,9 +39,11 @@ public class DoctorEditorWindow extends Window{
         TextField spec = new TextField();
         spec.setCaption("Специализация");
 
+        //Кнопки
         Button ok = new Button("OK");
         Button cancel = new Button("Отмена");
 
+        //Валидация полей для изменяемого объекта
         binder.forField(name)
                 .asRequired("Обязательное значение")
                 .bind("name");
@@ -60,11 +66,10 @@ public class DoctorEditorWindow extends Window{
             ok.setEnabled(!statusChangeEvent.hasValidationErrors());
         });
 
+        //Установка значений переданного объекта в поля редактирования
         binder.readBean(doctor);
 
-        buttons.addComponent(ok);
-        buttons.addComponent(cancel);
-
+        //Логика для кнопок
         ok.addClickListener(clickEvent -> {
             try {
                 binder.writeBean(doctor);
@@ -81,6 +86,10 @@ public class DoctorEditorWindow extends Window{
         cancel.addClickListener(clickEvent -> {
             this.close();
         });
+
+        //Добавление компонентов
+        buttons.addComponent(ok);
+        buttons.addComponent(cancel);
 
         content.addComponent(name);
         content.addComponent(surname);

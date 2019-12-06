@@ -1,6 +1,5 @@
 package com.haulmont.testtask.controller;
 
-import com.haulmont.testtask.dao.DBManager;
 import com.haulmont.testtask.dao.DoctorDao;
 import com.haulmont.testtask.dao.PatientDao;
 import com.haulmont.testtask.dao.PrescriptionDao;
@@ -25,7 +24,7 @@ public class Controller {
         return patientDao.getById(id);
     }
 
-    public static void detetePatient(long id){
+    public static void deletePatient(long id){
         patientDao.delete(id);
     }
 
@@ -41,7 +40,7 @@ public class Controller {
         return doctorDao.getAll();
     }
 
-    public static void deteteDoctor(long id){
+    public static void deleteDoctor(long id){
         doctorDao.delete(id);
     }
 

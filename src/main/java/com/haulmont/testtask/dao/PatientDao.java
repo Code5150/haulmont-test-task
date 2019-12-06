@@ -1,6 +1,6 @@
 package com.haulmont.testtask.dao;
 
-import com.haulmont.testtask.model.Doctor;
+import com.haulmont.testtask.controller.DBManager;
 import com.haulmont.testtask.model.Patient;
 
 import java.sql.*;
@@ -31,7 +31,6 @@ public class PatientDao implements Dao<Patient> {
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
             while (resultSet.next()) {
-                //System.out.println(resultSet.getString("Surname"));
                 resultList.add(new Patient(
                         resultSet.getLong("Patient_Id"),
                         resultSet.getString("Surname"),

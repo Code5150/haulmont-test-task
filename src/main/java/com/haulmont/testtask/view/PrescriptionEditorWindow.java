@@ -7,12 +7,8 @@ import com.haulmont.testtask.model.Prescription;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
-import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Theme(ValoTheme.THEME_NAME)
 
@@ -23,19 +19,23 @@ public class PrescriptionEditorWindow extends Window{
         setHeight("490px");
         setWidth("410px");
 
+        //Установка заголовка
         String caption;
         if(opt == MainUI.OPTIONS.ADD) caption = "Добавить";
         else caption = "Изменить";
         setCaption(caption);
 
+        //Установка разметки содержимого
         AbsoluteLayout content = new AbsoluteLayout();
         content.setSizeFull();
         HorizontalLayout buttons = new HorizontalLayout();
         HorizontalLayout persons = new HorizontalLayout();
         HorizontalLayout dates = new HorizontalLayout();
 
+        //Binder для переданного объекта
         Binder<Prescription> binder = new Binder<>(Prescription.class);
 
+        //Поля редактирования
         TextArea desc = new TextArea();
         desc.setCaption("Описание");
         ComboBox<Patient> patient = new ComboBox();
@@ -51,10 +51,11 @@ public class PrescriptionEditorWindow extends Window{
 
         desc.setWidth("96%");
 
+        //Кнопки
         Button ok = new Button("OK");
         Button cancel = new Button("Отмена");
 
-        //ComboBoxes item
+        //Списки элементов для всех ComboBox
         patient.setItems(Controller.getPatientList());
         patient.setItemCaptionGenerator(item -> item.getFullName());
         patient.setEmptySelectionAllowed(true);
@@ -67,6 +68,7 @@ public class PrescriptionEditorWindow extends Window{
         priority.setEmptySelectionAllowed(false);
         priority.setValue("Нормальный");
 
+        //Валидация полей для изменяемого объекта
         binder.forField(desc)
                 .asRequired("Обязательное значение")
                 .bind("description");
@@ -97,11 +99,10 @@ public class PrescriptionEditorWindow extends Window{
             ok.setEnabled(!statusChangeEvent.hasValidationErrors());
         });
 
+        //Установка значений переданного объекта в поля редактирования
         binder.readBean(prescription);
 
-        buttons.addComponent(ok);
-        buttons.addComponent(cancel);
-
+        //Логика для кнопок
         ok.addClickListener(clickEvent -> {
             try {
                 binder.writeBean(prescription);
@@ -120,12 +121,15 @@ public class PrescriptionEditorWindow extends Window{
             this.close();
         });
 
+        //Добавление компонентов
         persons.addComponent(patient);
         persons.addComponent(doctor);
 
         dates.addComponent(creation);
         dates.addComponent(validity);
 
+        buttons.addComponent(ok);
+        buttons.addComponent(cancel);
 
         content.addComponent(desc, "top: 5%; left: 2%;");
         content.addComponent(persons, "top: 40%; left: 2%;");
@@ -135,7 +139,7 @@ public class PrescriptionEditorWindow extends Window{
 
         setModal(true);
         setResizable(false);
-        //setClosable(false);
+        setClosable(false);
         setContent(content);
         center();
     }
