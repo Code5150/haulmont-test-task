@@ -3,6 +3,7 @@ package com.haulmont.testtask.dao;
 import com.haulmont.testtask.controller.Controller;
 import com.haulmont.testtask.controller.DBManager;
 import com.haulmont.testtask.model.Prescription;
+import com.haulmont.testtask.model.Statistics;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -47,6 +48,27 @@ public class PrescriptionDao implements Dao<Prescription> {
             e.printStackTrace();
         }
         return resultList;
+    }
+
+    public List<Statistics> getPrescriptionStatistics(){
+        PreparedStatement statement;
+        List<Statistics> result = new ArrayList<Statistics>();
+        try {
+            statement = manager.getConnection().prepareStatement("SELECT Doctor, COUNT(*) as PrescNum FROM " + TABLE_NAME +
+                    " GROUP BY Doctor");
+            statement.execute();
+            ResultSet resultSet = statement.getResultSet();
+            while (resultSet.next()) {
+                result.add(new Statistics(
+                        resultSet.getInt("PrescNum"),
+                        Controller.getDoctorById(resultSet.getLong("Doctor"))
+                ));
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override

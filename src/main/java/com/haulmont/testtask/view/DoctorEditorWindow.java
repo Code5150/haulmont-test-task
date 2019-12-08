@@ -79,7 +79,7 @@ public class DoctorEditorWindow extends Window{
                 this.close();
             }
             catch (ValidationException e){
-                System.out.println(e);
+                e.printStackTrace();
             }
         });
 
@@ -91,8 +91,8 @@ public class DoctorEditorWindow extends Window{
         buttons.addComponent(ok);
         buttons.addComponent(cancel);
 
-        content.addComponent(name);
         content.addComponent(surname);
+        content.addComponent(name);
         content.addComponent(patronymic);
         content.addComponent(spec);
         content.addComponent(buttons);

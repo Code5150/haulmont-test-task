@@ -89,8 +89,8 @@ public class PatientEditorWindow extends Window {
         buttons.addComponent(ok);
         buttons.addComponent(cancel);
 
-        content.addComponent(name);
         content.addComponent(surname);
+        content.addComponent(name);
         content.addComponent(patronymic);
         content.addComponent(num);
         content.addComponent(buttons);

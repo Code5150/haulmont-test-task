@@ -6,6 +6,7 @@ import com.haulmont.testtask.dao.PrescriptionDao;
 import com.haulmont.testtask.model.Doctor;
 import com.haulmont.testtask.model.Patient;
 import com.haulmont.testtask.model.Prescription;
+import com.haulmont.testtask.model.Statistics;
 
 import java.util.List;
 
@@ -70,5 +71,9 @@ public class Controller {
 
     public static void addPrescription(Prescription pres){
         prescriptionDao.add(pres);
+    }
+
+    public static List<Statistics> getDoctorPrescriptionStat(){
+        return prescriptionDao.getPrescriptionStatistics();
     }
 }

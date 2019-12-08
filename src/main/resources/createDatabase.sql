@@ -40,7 +40,10 @@ INSERT INTO Doctor (Surname, Name, Patronymic, Specialization) VALUES ('Воро
 INSERT INTO Doctor (Surname, Name, Patronymic, Specialization) VALUES ('Сергеев', 'Владимир', 'Станиславович', 'Терапевт');
 INSERT INTO Doctor (Surname, Name, Patronymic, Specialization) VALUES ('Тоцкий', 'Валерий', 'Анатольевич', 'Отоларинголог');
 INSERT INTO Doctor (Surname, Name, Patronymic, Specialization) VALUES ('Семёнов', 'Степан', 'Александрович', 'Венеролог');
+INSERT INTO Doctor (Surname, Name, Patronymic, Specialization) VALUES ('Валерьев', 'Валерьян', 'Валерьевич', 'Терапевт');
 
 INSERT INTO Prescription (Description, Patient, Doctor, Creation_Date, Validity, Priority) VALUES ('Аддерал', 0, 2, '2019-01-01', '2020-01-01', 'Немедленный');
 INSERT INTO Prescription (Description, Patient, Doctor, Creation_Date, Validity, Priority) VALUES ('Антибиотик', 7, 1, '2019-05-07', '2020-05-21', 'Срочный');
 INSERT INTO Prescription (Description, Patient, Doctor, Creation_Date, Validity, Priority) VALUES ('Противоаллергическое', 3, 0, '2019-02-03', '2019-03-03', 'Нормальный');
+INSERT INTO Prescription (Description, Patient, Doctor, Creation_Date, Validity, Priority) VALUES ('Капли валерианы', 6, 5, '2018-02-03', '2020-03-03', 'Нормальный');
+INSERT INTO Prescription (Description, Patient, Doctor, Creation_Date, Validity, Priority) VALUES ('Мирамистин', 9, 4, '2019-05-20', '2019-06-21', 'Срочный');

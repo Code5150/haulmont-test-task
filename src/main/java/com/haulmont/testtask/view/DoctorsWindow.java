@@ -31,6 +31,7 @@ public class DoctorsWindow extends Window{
         Button add = new Button("Добавить");
         Button change = new Button("Изменить");
         Button delete = new Button("Удалить");
+        Button stat = new Button("Статистика");
 
         //Текущий выбранный объект
         AtomicReference<Doctor> selectedDoctor = new AtomicReference<Doctor>();
@@ -84,6 +85,10 @@ public class DoctorsWindow extends Window{
             RefreshList();
         });
 
+        stat.addClickListener(clickEvent -> {
+            getUI().addWindow(new StatisticsView());
+        });
+
         //Удаление таблицы из списка при закрытии окна
         addCloseListener(closeEvent -> {
             gridList.remove(grid);
@@ -94,6 +99,7 @@ public class DoctorsWindow extends Window{
         buttons.addComponent(add);
         buttons.addComponent(change);
         buttons.addComponent(delete);
+        buttons.addComponent(stat);
         content.addComponent(buttons, "top: 86%; left: 2%;");
 
         center();

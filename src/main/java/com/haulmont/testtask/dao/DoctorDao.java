@@ -1,7 +1,9 @@
 package com.haulmont.testtask.dao;
 
+import com.haulmont.testtask.controller.Controller;
 import com.haulmont.testtask.controller.DBManager;
 import com.haulmont.testtask.model.Doctor;
+import com.haulmont.testtask.model.Statistics;
 
 import java.sql.*;
 import java.util.ArrayList;
