@@ -103,9 +103,9 @@ public class PrescriptionDao implements Dao<Prescription> {
         try{
             String s = "INSERT INTO " + TABLE_NAME
                     + " (Description, Patient, Doctor, Creation_date, Validity, Priority) VALUES ('" + prescription.getDescription()
-                    + "', '" + prescription.getPatient().getId()
-                    + "', '" + prescription.getDoctor().getId()
-                    + "', '" + Date.valueOf(prescription.getCreationDate())
+                    + "', " + prescription.getPatient().getId()
+                    + ", " + prescription.getDoctor().getId()
+                    + ", '" + Date.valueOf(prescription.getCreationDate())
                     + "', '" + Date.valueOf(prescription.getValidity())
                     + "', '" + prescription.getPriority()
                     + "');";
@@ -146,9 +146,9 @@ public class PrescriptionDao implements Dao<Prescription> {
         try{
             String s = "UPDATE " + TABLE_NAME
                     + " SET Description='" + prescription.getDescription()
-                    + "', Patient='" + prescription.getPatient().getId()
-                    + "', Doctor='" + prescription.getDoctor().getId()
-                    + "', Creation_Date='" + Date.valueOf(prescription.getCreationDate())
+                    + "', Patient=" + prescription.getPatient().getId()
+                    + ", Doctor=" + prescription.getDoctor().getId()
+                    + ", Creation_Date='" + Date.valueOf(prescription.getCreationDate())
                     + "', Validity='" + Date.valueOf(prescription.getValidity())
                     + "', Priority='" + prescription.getPriority()
                     + "' WHERE Prescription_Id=" + prescription.getId();

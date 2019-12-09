@@ -90,7 +90,7 @@ public class PatientsWindow extends Window{
                 err.center();
                 getUI().addWindow(err);
             }
-            RefreshList();
+            if(errCode == 0) RefreshList();
         });
 
         //Удаление таблицы из списка при закрытии окна

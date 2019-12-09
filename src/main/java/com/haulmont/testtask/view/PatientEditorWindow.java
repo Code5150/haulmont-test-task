@@ -64,7 +64,7 @@ public class PatientEditorWindow extends Window {
                 .bind("patronymic");
 
         binder.forField(num)
-                .withValidator(str -> str.matches("[+]?\\d+[(]?\\d{3}[)]?\\d{3}[-]?\\d{2}[-]?\\d{2}")
+                .withValidator(str -> str.matches("[+]?\\d{1}[(]{1}\\d{3}[)]{1}\\d{3}[-]?\\d{2}[-]?\\d{2}")
                         || str.matches("\\d{3}[-]?\\d{2}[-]?\\d{2}"),
                         "Телефонный номер не может содержать букв и пробелов и должен быть формата ХХХ-ХХ-ХХ или +Х(ХХХ)ХХХ-ХХ-ХХ")
                 .asRequired("Обязательное значение")

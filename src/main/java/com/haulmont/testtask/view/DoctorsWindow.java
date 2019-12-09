@@ -91,7 +91,7 @@ public class DoctorsWindow extends Window{
                 err.center();
                 getUI().addWindow(err);
             }
-            RefreshList();
+            if(errCode == 0) RefreshList();
         });
 
         stat.addClickListener(clickEvent -> {
