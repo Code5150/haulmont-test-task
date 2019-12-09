@@ -8,7 +8,8 @@ import java.sql.*;
 public class DBManager {
     private final String DBSCRIPT_PATH = "src/main/resources/createDatabase.sql";
     private final String DB_NAME = "taskdb";
-    private final String DB_URL = "jdbc:hsqldb:mem:" + DB_NAME;
+    private final String DB_PATH = "src/main/resources/" + DB_NAME;
+    private final String DB_URL = "jdbc:hsqldb:file:" + DB_PATH;
 
     private Connection connection = null;
 
@@ -32,7 +33,8 @@ public class DBManager {
         //Соединение
         try {
             connection = dataSource.getConnection();
-            createDatabase();
+            executeSqlScript("src/main/resources/createDatabase.sql");
+            //executeSqlScript("src/main/resources/fillDatabase.sql");
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -40,10 +42,10 @@ public class DBManager {
     }
 
     //Считывает и выполняет SQL-скрипт
-    public void createDatabase(){
+    public void executeSqlScript(String path){
         InputStream input;
         try {
-            input = new FileInputStream(DBSCRIPT_PATH);
+            input = new FileInputStream(path);
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
             String str = reader.readLine();
