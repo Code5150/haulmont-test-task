@@ -70,6 +70,7 @@ public class PrescriptionEditorWindow extends Window{
 
         //Валидация полей для изменяемого объекта
         binder.forField(desc)
+                .withValidator(str -> str.length() <= 256, "Максимальная длина - 256 знаков")
                 .asRequired("Обязательное значение")
                 .bind("description");
 
@@ -86,12 +87,14 @@ public class PrescriptionEditorWindow extends Window{
                 .bind("creationDate");
 
         binder.forField(validity)
+                .withValidator(localDate -> localDate.isAfter(creation.getValue()),
+                        "Дата окончания действия не может быть раньше даты назначения")
                 .asRequired("Обязательное значение")
                 .bind("validity");
 
         binder.forField(priority)
                 .asRequired("Обязательное значение")
-                .bind("priority");//Здесь нужно вручную прописать геттер и сеттер
+                .bind("priority");
 
         ok.setEnabled(false);
 

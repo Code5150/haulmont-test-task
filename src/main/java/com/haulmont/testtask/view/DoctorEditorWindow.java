@@ -45,18 +45,29 @@ public class DoctorEditorWindow extends Window{
 
         //Валидация полей для изменяемого объекта
         binder.forField(name)
+                .withValidator(str -> str.length() <= 64, "Максимальная длина - 64 знака")
+                .withValidator(str -> str.matches("[-a-zA-Zа-яА-Я]+"),
+                        "ФИО не может содержать цифр, пробелов и спецсимволов")
                 .asRequired("Обязательное значение")
                 .bind("name");
 
         binder.forField(surname)
+                .withValidator(str -> str.length() <= 64, "Максимальная длина - 64 знака")
+                .withValidator(str -> str.matches("[-a-zA-Zа-яА-Я]+"),
+                        "ФИО не может содержать цифр, пробелов и спецсимволов")
                 .asRequired("Обязательное значение")
                 .bind("surname");
 
         binder.forField(patronymic)
+                .withValidator(str -> str.length() <= 64, "Максимальная длина - 64 знака")
+                .withValidator(str -> str.matches("[-a-zA-Zа-яА-Я]+"),
+                        "ФИО не может содержать цифр, пробелов и спецсимволов")
                 .asRequired("Обязательное значение")
                 .bind("patronymic");
 
         binder.forField(spec)
+                .withValidator(str -> str.length() <= 64, "Максимальная длина - 64 знака")
+                .withValidator(str -> str.matches("[- a-zA-Zа-яА-Я]+"), "Специализация не может содержать цифр и спецсимволов")
                 .asRequired("Обязательное значение")
                 .bind("specialization");
 

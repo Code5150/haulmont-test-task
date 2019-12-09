@@ -8,7 +8,7 @@ public interface Dao<T> {
     void setDBManager(DBManager manager);
     void add(T entity);
     void update(T entity);
-    void delete(long id);
+    int delete(long id);
     List<T> getAll();
     T getById(long id);
 }

@@ -81,7 +81,16 @@ public class DoctorsWindow extends Window{
         });
 
         delete.addClickListener(clickEvent -> {
-            Controller.deleteDoctor(selectedDoctor.get().getId());
+            int errCode = Controller.deleteDoctor(selectedDoctor.get().getId());
+            if (errCode == 1){
+                VerticalLayout errContent = new VerticalLayout();
+                errContent.addComponent(new Label("Нельзя удалить врача, для которого существуют рецепты"));
+                Window err = new Window("Ошибка");
+                err.setContent(errContent);
+                err.setModal(true);
+                err.center();
+                getUI().addWindow(err);
+            }
             RefreshList();
         });
 

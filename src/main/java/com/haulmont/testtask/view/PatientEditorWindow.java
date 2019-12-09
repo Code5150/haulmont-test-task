@@ -43,18 +43,30 @@ public class PatientEditorWindow extends Window {
 
         //Валидация полей для изменяемого объекта
         binder.forField(name)
+                .withValidator(str -> str.length() <= 64, "Максимальная длина - 64 знака")
+                .withValidator(str -> str.matches("[-a-zA-Zа-яА-Я]+"),
+                        "ФИО не может содержать цифр, пробелов и спецсимволов")
                 .asRequired("Обязательное значение")
                 .bind("name");
 
         binder.forField(surname)
+                .withValidator(str -> str.length() <= 64, "Максимальная длина - 64 знака")
+                .withValidator(str -> str.matches("[-a-zA-Zа-яА-Я]+"),
+                        "ФИО не может содержать цифр, пробелов и спецсимволов")
                 .asRequired("Обязательное значение")
                 .bind("surname");
 
         binder.forField(patronymic)
+                .withValidator(str -> str.length() <= 64, "Максимальная длина - 64 знака")
+                .withValidator(str -> str.matches("[-a-zA-Zа-яА-Я]+"),
+                        "ФИО не может содержать цифр, пробелов и спецсимволов")
                 .asRequired("Обязательное значение")
                 .bind("patronymic");
 
         binder.forField(num)
+                .withValidator(str -> str.matches("[+]?\\d+[(]?\\d{3}[)]?\\d{3}[-]?\\d{2}[-]?\\d{2}")
+                        || str.matches("\\d{3}[-]?\\d{2}[-]?\\d{2}"),
+                        "Телефонный номер не может содержать букв и пробелов и должен быть формата ХХХ-ХХ-ХХ или +Х(ХХХ)ХХХ-ХХ-ХХ")
                 .asRequired("Обязательное значение")
                 .bind("phoneNumber");
 

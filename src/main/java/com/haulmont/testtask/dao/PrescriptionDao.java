@@ -120,7 +120,7 @@ public class PrescriptionDao implements Dao<Prescription> {
     }
 
     @Override
-    public void delete(long id) {
+    public int delete(long id) {
         PreparedStatement statement;
         try{
             String s = "DELETE FROM " + TABLE_NAME
@@ -131,10 +131,13 @@ public class PrescriptionDao implements Dao<Prescription> {
         }
         catch(SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
+            return 1;
         }
         catch (SQLException e) {
             e.printStackTrace();
+            return 1;
         }
+        return 0;
     }
 
     @Override

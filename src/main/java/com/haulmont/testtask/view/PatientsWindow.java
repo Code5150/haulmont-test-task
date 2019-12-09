@@ -80,7 +80,16 @@ public class PatientsWindow extends Window{
         });
 
         delete.addClickListener(clickEvent -> {
-            Controller.deletePatient(selectedPatient.get().getId());
+            int errCode = Controller.deletePatient(selectedPatient.get().getId());
+            if (errCode == 1){
+                VerticalLayout errContent = new VerticalLayout();
+                errContent.addComponent(new Label("Нельзя удалить пациента, для которого существуют рецепты"));
+                Window err = new Window("Ошибка");
+                err.setContent(errContent);
+                err.setModal(true);
+                err.center();
+                getUI().addWindow(err);
+            }
             RefreshList();
         });
 

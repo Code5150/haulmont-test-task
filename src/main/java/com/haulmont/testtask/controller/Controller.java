@@ -25,8 +25,8 @@ public class Controller {
         return patientDao.getById(id);
     }
 
-    public static void deletePatient(long id){
-        patientDao.delete(id);
+    public static int deletePatient(long id){
+        return patientDao.delete(id);
     }
 
     public static void updatePatient(Patient patient){
@@ -41,8 +41,8 @@ public class Controller {
         return doctorDao.getAll();
     }
 
-    public static void deleteDoctor(long id){
-        doctorDao.delete(id);
+    public static int deleteDoctor(long id){
+        return doctorDao.delete(id);
     }
 
     public static Doctor getDoctorById(long id){
